@@ -9,7 +9,7 @@ namespace MovieLibraryOO.Mappers
         public MovieProfile()
         {
             CreateMap<Movie, MovieDto>();
-            // Use CreateMap... Etc.. here (Profile methods are the same as configuration methods)
+            
         }
     }
 }

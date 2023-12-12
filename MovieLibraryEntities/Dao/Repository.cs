@@ -9,15 +9,11 @@ namespace MovieLibraryEntities.Dao
         private readonly IDbContextFactory<MovieContext> _contextFactory;
         private readonly MovieContext _context;
 
-        public Repository(MovieContext dbContext)
+        public Repository(IDbContextFactory<MovieContext> contextFactory)
         {
-            _context = dbContext;
+            _contextFactory = contextFactory;
+            _context = _contextFactory.CreateDbContext();
         }
-        //public Repository(IDbContextFactory<MovieContext> contextFactory)
-        //{
-        //    _contextFactory = contextFactory;
-        //    _context = _contextFactory.CreateDbContext();
-        //}
 
         public void Dispose()
         {
@@ -26,16 +22,48 @@ namespace MovieLibraryEntities.Dao
 
         public IEnumerable<Movie> GetAll()
         {
-            return _context.Movies.ToList();
+            
+            using (var db = new MovieContext())
+            {
+                return db.Movies.ToList();
+            }
         }
 
         public IEnumerable<Movie> Search(string searchString)
         {
-            var allMovies = _context.Movies;
-            var listOfMovies = allMovies.ToList();
-            var temp = listOfMovies.Where(x => x.Title.Contains(searchString, StringComparison.CurrentCultureIgnoreCase));
+            using (var db = new MovieContext())
+            {
+                var allMovies = db.Movies;
+                var listOfMovies = allMovies.ToList();
+                var temp = listOfMovies.Where(x => x.Title.Contains(searchString, StringComparison.CurrentCultureIgnoreCase));
 
-            return temp;
+                return temp;
+            }
+        }
+
+        public IEnumerable<User> GetAllUser()
+        {
+            using (var db = new MovieContext())
+            {
+                return db.Users.ToList();
+            }
+        }
+
+        public IEnumerable<Occupation> GetAllOccupation()
+        {
+            using (var db = new MovieContext())
+            {
+                return db.Occupations.ToList();
+            }
+        }
+
+        //too many ratings 
+        public IEnumerable<UserMovie> GetAllUserMovie()
+        {
+            using (var db = new MovieContext())
+            {
+                return db.UserMovies.ToList();
+            }
         }
     }
 }

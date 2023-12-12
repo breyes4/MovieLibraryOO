@@ -16,7 +16,29 @@ namespace MovieLibraryOO
             Update,
             Delete,
             Search,
+            ToUsers,
+            ToRatings,
             Exit
+        }
+
+        public enum UserMenuOptions
+        {
+            ListFromDb,
+            ListFromDbWithFullOccupationName,
+            Add,
+            Delete,
+            ListOccupationsFromDb,
+            AddOccupation,
+            DeleteOccupation,
+            BackToMovies
+        }
+
+        public enum RatingMenuOptions
+        {
+            ListFromDb,
+            AddRating,
+            DeleteRating,
+            BackToMovies
         }
 
         public Menu() // default constructor
@@ -32,7 +54,31 @@ namespace MovieLibraryOO
                     .Title("Choose your [green]menu action[/]?")
                     .AddChoices(menuOptions));
 
-            return (MenuOptions) Enum.Parse(typeof(MenuOptions), choice);
+            return (MenuOptions)Enum.Parse(typeof(MenuOptions), choice);
+        }
+
+        public UserMenuOptions ChooseUserAction()
+        {
+            var menuOptions = Enum.GetNames(typeof(UserMenuOptions));
+
+            var choice = AnsiConsole.Prompt(
+                new SelectionPrompt<string>()
+                    .Title("Choose your [green]user menu action[/]?")
+                    .AddChoices(menuOptions));
+
+            return (UserMenuOptions)Enum.Parse(typeof(UserMenuOptions), choice);
+        }
+
+        public RatingMenuOptions ChooseRatingAction()
+        {
+            var menuOptions = Enum.GetNames(typeof(RatingMenuOptions));
+
+            var choice = AnsiConsole.Prompt(
+                new SelectionPrompt<string>()
+                    .Title("Choose your [green]rating menu action[/]?")
+                    .AddChoices(menuOptions));
+
+            return (RatingMenuOptions)Enum.Parse(typeof(RatingMenuOptions), choice);
         }
 
         public void Exit()
@@ -46,6 +92,12 @@ namespace MovieLibraryOO
         public string GetUserResponse(string question, string highlightedText, string highlightedColor)
         {
             return AnsiConsole.Ask<string>($"{question} [{highlightedColor}]{highlightedText}[/]");
+        }
+
+        //A simplified user response that doesn't require a color or 2nd text parameter
+        public string GetUserResponseSimple(string question)
+        {
+            return AnsiConsole.Ask<string>($"{question}");
         }
 
         #region examples
